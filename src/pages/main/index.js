@@ -1,45 +1,48 @@
 import React, {Component} from 'react';
-import api from '../../services/api';
-import { Link } from 'react-router-dom'
+import MatchesService from '../../services/matches-service';
+import HeroesService from '../../services/heroes-service';
+import MatchListItem from '../../components/MatchListItem';
 
 export default class Main extends Component {
+
+    matchesService = new MatchesService
+    heroesService = new HeroesService
+
     state = {
-        matches: [],
-        requestInfo: []
+        matches: []
     }
 
     componentDidMount(){
+        //this.renderHeroesJson()
         this.loadMatches();
     }
 
     loadMatches = async () => {
-        const response = await api.get('players/101652767/matches?limit=10');
-        const { data, ...requestInfo } = response
+        const matches = await this.matchesService.getMatches();
+        console.log(matches)
 
-        console.log(response)
-        console.log(data)
-        console.log(requestInfo)
         this.setState({
-            matches: response.data,
-            requestInfo
+            matches
         })
     };
-
-    getWinner = (radiant_win) => (
-        radiant_win ? "Radiant" : "Dire"
-    )
 
     render (){
         return (
             <div className="matches">
                 {this.state.matches.map(match => (
-                    <div className="match" key={match.match_id}>
-                        <h2>Match id: {match.match_id}</h2>
-                        <p>{this.getWinner(match.radiant_win)} win</p>
-                        <Link to={'/hero/'+match.hero_id}>Abrir Hero Jogado {match.hero_id}</Link>
-                    </div>
+                    <MatchListItem key={match.match_id} match={match} />
                 ))}
             </div>
         )
+    }
+
+    renderHeroesJson(){
+        //to do
+        let heroes = this.heroesService.getAll().map(function(hero){
+            hero.image = "https://api.opendota.com/apps/dota2/images/heroes/"+hero.localized_name.toLowerCase().replace(' ', '_')+"_full.png"
+            return hero
+        })
+
+        console.log(JSON.stringify(heroes))
     }
 }

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import api from '../../services/api'
+import HeroesService from '../../services/heroes-service'
 import { Link } from 'react-router-dom'
 
 export default class Hero extends Component{
-
+    heroesApi = new HeroesService
     state = {
         hero: {}
     }
@@ -14,10 +14,8 @@ export default class Hero extends Component{
     }
 
     loadHero = async (id) => {
-        const {data, ...requestInfo} = await api.get('heroes');
-        const hero = data.filter(hero => (hero.id == id))[0]
+        const hero = await this.heroesApi.getHero(id)
         console.log(hero)
-        
         this.setState({
             hero
         })
@@ -28,6 +26,7 @@ export default class Hero extends Component{
         return (
             <div>
                 <h1>{hero.localized_name}</h1>
+                <img src={hero.image}></img>
                 <Link to ="/">Voltar</Link>
             </div>
         )

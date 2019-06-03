@@ -1,11 +1,14 @@
+@import "../../locals/css/variables.scss";
+
 header#main-header{
     width: 100%;
     height: 60px;
-    background: orange;
+    background: $listbg;
     font-size: 18px;
     font-weight: bold;
-    color: #fff;
+    color: $textcolor;
     display: flex;
     justify-content: center;
-    align-content: center;
+    align-items: center;
+    margin-bottom: 50px;
 }

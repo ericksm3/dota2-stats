@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-const api = axios.create({
-    baseURL: 'https://api.opendota.com/api/'
-})
+export default class Api {
 
-export default api;
+    player = '101652767'
+
+    request = axios.create({
+        baseURL: 'https://api.opendota.com/api/'
+    })
+}
